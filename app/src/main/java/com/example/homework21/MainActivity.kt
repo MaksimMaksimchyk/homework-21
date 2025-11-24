@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.homework21.MultiType.Author
 import com.example.homework21.MultiType.ButtonText
 import com.example.homework21.MultiType.ImageText
+import com.example.homework21.MultiType.MyData
 import com.example.homework21.MultiType.MyMultiAdapter
 import com.example.homework21.databinding.ActivityMainBinding
 import kotlin.random.Random
@@ -34,19 +35,26 @@ class MainActivity : AppCompatActivity() {
         binding.myRecycler.layoutManager = LinearLayoutManager(this)
         binding.myRecycler.adapter = myAdapter
 
+        val newData = mutableListOf<MyData>()
+        newData.addAll(listOfData)
         binding.buttonAdd.setOnClickListener {
             when (Random.nextInt(0, 3)) {
-                0 -> listOfData.add(Author())
-                1 -> listOfData.add(ButtonText())
-                2 -> listOfData.add(ImageText())
+                0 -> newData.add(Author())
+                1 -> newData.add(ButtonText())
+                2 -> newData.add(ImageText())
             }
             Toast.makeText(this, "Added random card", Toast.LENGTH_SHORT).show()
         }
 
         binding.buttonUpdate.setOnClickListener {
-            myAdapter.notifyDataSetChanged()
+            myAdapter.updateList(newData.toList())
         }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            myAdapter.updateList(newData.toList())
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+
     }
-
-
 }
+

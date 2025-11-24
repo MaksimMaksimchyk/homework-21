@@ -2,12 +2,14 @@ package com.example.homework21.MultiType
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.homework21.databinding.AuthorViewBinding
 import com.example.homework21.databinding.ButtonTextViewBinding
 import com.example.homework21.databinding.ImageTextViewBinding
+import kotlin.random.Random
 
-class MyMultiAdapter(private val data: MutableList<Any>) :
+class MyMultiAdapter(private var data: List<MyData>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -90,10 +92,22 @@ class MyMultiAdapter(private val data: MutableList<Any>) :
         return data.size
     }
 
+    fun updateList(newData: List<MyData>) {
+        val diffResult = DiffUtil.calculateDiff(MyDiffUtilCallback(data, newData))
+        data = newData
+        diffResult.dispatchUpdatesTo(this)
+    }
+
 }
 
-data class Author(val name: String = "Sample Name", val text: String = "Random Sample Text")
+open class MyData(val id: Long = Random.nextLong())
+data class Author(
+    val name: String = "Sample Name",
+    val text: String = "Random Sample Text",
+) : MyData()
 
-data class ButtonText(val text: String = "Random Sample Text")
+data class ButtonText(val text: String = "Random Sample Text") :
+    MyData()
 
-data class ImageText(val text: String = "Random Sample Text")
+data class ImageText(val text: String = "Random Sample Text") :
+    MyData()
