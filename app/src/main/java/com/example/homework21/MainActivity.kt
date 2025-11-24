@@ -12,6 +12,7 @@ import com.example.homework21.MultiType.ButtonText
 import com.example.homework21.MultiType.ImageText
 import com.example.homework21.MultiType.MyData
 import com.example.homework21.MultiType.MyMultiAdapter
+import com.example.homework21.MultiType.VerticalSpaceItemDecoration
 import com.example.homework21.databinding.ActivityMainBinding
 import kotlin.random.Random
 
@@ -34,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         val myAdapter = MyMultiAdapter(listOfData)
         binding.myRecycler.layoutManager = LinearLayoutManager(this)
         binding.myRecycler.adapter = myAdapter
+        val decor = VerticalSpaceItemDecoration(20)
+        binding.myRecycler.addItemDecoration(decor)
 
         val newData = mutableListOf<MyData>()
         newData.addAll(listOfData)
@@ -47,12 +50,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonUpdate.setOnClickListener {
+            binding.myRecycler.removeItemDecoration(decor)
             myAdapter.updateList(newData.toList())
+            binding.myRecycler.addItemDecoration(decor)
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.myRecycler.removeItemDecoration(decor)
             myAdapter.updateList(newData.toList())
             binding.swipeRefreshLayout.isRefreshing = false
+            binding.myRecycler.addItemDecoration(decor)
         }
 
     }
